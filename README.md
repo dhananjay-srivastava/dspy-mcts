@@ -1,4 +1,4 @@
-# MCTS Implementation for Medical Error Detection
+# MCTS Implementation in DSPy
 
 ## Overview
 
