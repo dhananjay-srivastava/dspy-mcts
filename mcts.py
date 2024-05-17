@@ -3,6 +3,11 @@ import numpy as np
 import pandas as pd
 from dsp.utils import deduplicate
 
+turbo = dspy.OpenAI(model='gpt-3.5-turbo',logprobs=True)
+colbertv2_wiki17_abstracts = dspy.ColBERTv2(url='http://20.102.90.50:2017/wiki17_abstracts')
+
+dspy.settings.configure(lm=turbo, rm=colbertv2_wiki17_abstracts)
+
 class GenerateAnswer(dspy.Signature):
     """Based on the primary context (Premise), answer the question (Hypothesis) in a yes or no format. Use the additional context to support your answer"""
 

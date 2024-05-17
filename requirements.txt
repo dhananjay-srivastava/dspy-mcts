@@ -1,0 +1,4 @@
+dspy
+openai
+plotly
+networkx
