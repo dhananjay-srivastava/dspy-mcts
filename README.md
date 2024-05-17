@@ -1,60 +1,103 @@
-# MCTS Implementation in DSPy
+# dspy-mcts
 
 ## Overview
-
-This repository contains an implementation of Monte Carlo Tree Search (MCTS) for detecting medical errors in given contexts. The algorithm is designed to answer questions based on the provided context and additional context, and it can also generate search queries to aid in finding answers.
+This repository contains an implementation of Monte Carlo Tree Search (MCTS) for detecting medical errors in given contexts. The algorithm uses DSPy to provide answers and generate search queries to aid in finding solutions.
 
 ## Table of Contents
+1. [Installation](#installation)
+2. [Usage](#usage)
+3. [Classes and Methods](#classes-and-methods)
+4. [MCTS Algorithm](#mcts-algorithm)
+5. [License](#license)
+6. [Contributing](#contributing)
+7. [Contact](#contact)
 
-1. [Usage](#usage)
-2. [Classes and Methods](#classes-and-methods)
-3. [MCTS Algorithm](#mcts-algorithm)
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/dhananjay-srivastava/dspy-mcts.git
+   cd dspy-mcts
+   ```
+2. Pygraphviz needs to be installed and checked working before running the code, here's what works on colab
+   ```bash
+   !apt install libgraphviz-dev
+   !pip install pygraphviz
+   pip install -r requirements.txt
+   ```
 
 ## Usage
+To use this project, you can run the `main.py` script which demonstrates how to use the MCTS implementation for detecting medical errors and generating search queries.
 
-You can use the provided classes and methods to perform MCTS-based medical error detection and query generation. The primary classes are `GenerateAnswer` and `GenerateSearchQuery`, which are signatures for the tasks.
+### Running the Script
+1. Set your OpenAI API key in the `main.py` script:
+   ```python
+   os.environ['OPENAI_API_KEY'] = "your_openai_api_key"
+   ```
+2. Execute the script:
+   ```bash
+   python main.py
+   ```
+
+### Example
+The `main.py` script provides an example of how to use the `SimplifiedMCTS` class to analyze a medical context and question. The script:
+1. Initializes the MCTS object.
+2. Defines a medical context and question.
+3. Runs the MCTS algorithm to get the response.
+4. Visualizes the MCTS exploration path using a graph.
+
+Here is a brief excerpt from `main.py`:
+```python
+# Set the OpenAI API key
+os.environ['OPENAI_API_KEY'] = "your_openai_api_key"
+
+# Initialize the MCTS object
+mcts_obj = SimplifiedMCTS()
+
+# Define the context and question
+context = "A 53-year-old man comes to the physician because of a 1-day history of fever and chills, severe malaise, and cough with yellow-green sputum. He works as a commercial fisherman on Lake Superior. Current medications include metoprolol and warfarin. His temperature is 38.5 C (101.3 F), pulse is 96/min, respirations are 26/min, and blood pressure is 98/62 mm Hg. Examination shows increased fremitus and bronchial breath sounds over the right middle lung field. An x-ray of the chest shows consolidation of the right upper lobe. The causal pathogen is Streptococcus pneumoniae."
+question = "The causal pathogen is Streptococcus pneumoniae."
+
+response = mcts_obj(context, question)
+```
+
+### Visualizing the MCTS Tree
+The script includes functions to visualize the MCTS tree using Plotly and NetworkX. The `display_graph` function takes the nodes of the MCTS tree and generates an interactive visualization.
 
 ## Classes and Methods
 
 ### GenerateAnswer
-- **Description**: Based on the primary context (Premise), answers the question (Hypothesis) in a yes or no format using additional context to support the answer.
-- **Inputs**:
-  - `context`: Contains important relevant facts (Premise) about the question.
-  - `additional_context`: May contain relevant facts.
-  - `question`: Based upon the context (Premise) and the additional context, checks if there is a medical error (contradiction) in the sentence.
-- **Output**:
-  - `answer`: Yes or No.
+**Description:** Answers questions based on context and additional context.
+- **Inputs:**
+  - `context`: Relevant facts (Premise).
+  - `additional_context`: Additional relevant facts.
+  - `question`: Checks for medical errors.
+- **Output:** `answer`: Yes or No.
 
 ### GenerateSearchQuery
-- **Description**: Writes a simple search query that will help answer a complex question.
-- **Inputs**:
-  - `context`: Contains important relevant facts about the question.
-  - `additional_context`: May contain relevant facts.
-  - `question`: Given the context, checks if there is a medical error in the sentence.
-- **Output**:
-  - `query`: Generates a search query to help in answering the question.
+**Description:** Generates search queries to help answer questions.
+- **Inputs:**
+  - `context`: Relevant facts.
+  - `additional_context`: Additional relevant facts.
+  - `question`: Checks for medical errors.
+- **Output:** `query`: Search query.
 
 ### Node
-- **Description**: Represents a node in the MCTS tree.
-- **Attributes**:
-  - `context`, `additional_context`, `question`: Stores the relevant data.
-  - `answer`, `answer_probability`, `answer_reasoning`, `answer_reasoning_probability`: Stores the answer details.
-  - `query`, `query_probability`, `query_reasoning`, `query_reasoning_probability`: Stores the query details.
-  - `t`, `n`, `uct`: Stores the UCT values for the node.
-  - `children`: List of child nodes.
-  - `parent`: Reference to the parent node.
-- **Methods**:
-  - `calc_uct(n, t, n_parent)`: Calculates the Upper Confidence Bound for Trees (UCT) value.
-  - `is_root()`: Checks if the node is the root node.
+**Description:** Represents a node in the MCTS tree.
+- **Attributes:** `context`, `additional_context`, `question`, `answer`, `query`, `children`, `parent`, `t`, `n`, `uct`.
+- **Methods:** `calc_uct`, `is_root`.
 
 ## MCTS Algorithm
+The MCTS algorithm involves:
+1. **Selection:** Selects the best child node based on UCT values.
+2. **Expansion:** Expands the node by adding all possible child nodes.
+3. **Simulation:** Simulates the outcome from the expanded node.
+4. **Backpropagation:** Updates the nodes with the result of the simulation.
 
-The Monte Carlo Tree Search (MCTS) algorithm involves:
-1. **Selection**: Selecting the best child node based on UCT values.
-2. **Expansion**: Expanding the node by adding all possible child nodes.
-3. **Simulation**: Simulating the outcome from the expanded node.
-4. **Backpropagation**: Backpropagating the result of the simulation up the tree to update the nodes.
+## License
+This project is licensed under the MIT License.
 
+## Contributing
+Contributions are welcome. Please submit pull requests or open issues for any improvements or bugs.
 
 ---
 
